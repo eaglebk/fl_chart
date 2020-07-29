@@ -416,26 +416,25 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
       }
     }
 
-      // Below the bottom titles
-      final belowBottomTitles = targetData.titlesData.belowBottomTitles;
-      if (belowBottomTitles.showTitles) {
-        for (int index = 0; index < groupBarsPosition.length; index++) {
-          final _GroupBarsPosition groupBarPos = groupBarsPosition[index];
+    // Below the bottom titles
+    final belowBottomTitles = targetData.titlesData.belowBottomTitles;
+    if (belowBottomTitles.showTitles) {
+      for (int index = 0; index < groupBarsPosition.length; index++) {
+        final _GroupBarsPosition groupBarPos = groupBarsPosition[index];
 
-          final String text = belowBottomTitles.getTitles(data.barGroups[index].x.toDouble());
-          final TextSpan span = TextSpan(style: belowBottomTitles.textStyle, text: text);
-          final TextPainter tp = TextPainter(
-              text: span,
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.ltr,
-              textScaleFactor: textScale);
-          tp.layout();
-          double x = groupBarPos.groupX;
-          final double y = drawSize.height + getTopOffsetDrawSize() + belowBottomTitles.margin;
+        final String text = belowBottomTitles.getTitles(data.barGroups[index].x.toDouble());
+        final TextSpan span = TextSpan(style: belowBottomTitles.textStyle, text: text);
+        final TextPainter tp = TextPainter(
+            text: span,
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
+            textScaleFactor: textScale);
+        tp.layout();
+        double x = groupBarPos.groupX;
+        final double y = drawSize.height + getTopOffsetDrawSize() + belowBottomTitles.margin;
 
-          x -= tp.width / 2;
-          tp.paint(canvas, Offset(x, y));
-        }
+        x -= tp.width / 2;
+        tp.paint(canvas, Offset(x, y));
       }
     }
   }
