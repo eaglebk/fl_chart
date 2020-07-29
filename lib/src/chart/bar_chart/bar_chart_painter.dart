@@ -413,19 +413,29 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
         x += translateRotatedPosition(tp.width, bottomTitles.rotateAngle);
         tp.paint(canvas, Offset(x, y));
         canvas.restore();
+      }
+    }
 
-        final TextPainter tp2 = TextPainter(
-            text: span,
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.ltr,
-            textScaleFactor: textScale);
-        tp2.layout();
-        double x2 = groupBarPos.groupX;
-        final double y2 = drawSize.height + getTopOffsetDrawSize() + bottomTitles.margin + 20;
+      // Below the bottom titles
+      final belowBottomTitles = targetData.titlesData.belowBottomTitles;
+      if (belowBottomTitles.showTitles) {
+        for (int index = 0; index < groupBarsPosition.length; index++) {
+          final _GroupBarsPosition groupBarPos = groupBarsPosition[index];
 
-        x2 -= tp2.width / 2;
-        // canvas.save();
-        tp2.paint(canvas, Offset(x2, y2));
+          final String text = belowBottomTitles.getTitles(data.barGroups[index].x.toDouble());
+          final TextSpan span = TextSpan(style: belowBottomTitles.textStyle, text: text);
+          final TextPainter tp = TextPainter(
+              text: span,
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.ltr,
+              textScaleFactor: textScale);
+          tp.layout();
+          double x = groupBarPos.groupX;
+          final double y = drawSize.height + getTopOffsetDrawSize() + belowBottomTitles.margin;
+
+          x -= tp.width / 2;
+          tp.paint(canvas, Offset(x, y));
+        }
       }
     }
   }

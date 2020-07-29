@@ -192,22 +192,24 @@ class AxisTitle with EquatableMixin {
 class FlTitlesData with EquatableMixin {
   final bool show;
 
-  final SideTitles leftTitles, topTitles, rightTitles, bottomTitles;
+  final SideTitles leftTitles, topTitles, rightTitles, bottomTitles, belowBottomTitles;
 
   /// [show] determines showing or hiding all titles,
   /// [leftTitles], [topTitles], [rightTitles], [bottomTitles] defines
   /// side titles of left, top, right, bottom sides respectively.
-  FlTitlesData({
-    bool show,
-    SideTitles leftTitles,
-    SideTitles topTitles,
-    SideTitles rightTitles,
-    SideTitles bottomTitles,
-  })  : show = show ?? true,
+  FlTitlesData(
+      {bool show,
+      SideTitles leftTitles,
+      SideTitles topTitles,
+      SideTitles rightTitles,
+      SideTitles bottomTitles,
+      SideTitles belowBottomTitles})
+      : show = show ?? true,
         leftTitles = leftTitles ?? SideTitles(reservedSize: 40, showTitles: true),
         topTitles = topTitles ?? SideTitles(reservedSize: 6),
         rightTitles = rightTitles ?? SideTitles(reservedSize: 40),
-        bottomTitles = bottomTitles ?? SideTitles(reservedSize: 22, showTitles: true);
+        bottomTitles = bottomTitles ?? SideTitles(reservedSize: 22, showTitles: true),
+        belowBottomTitles = belowBottomTitles ?? SideTitles(reservedSize: 22, showTitles: true);
 
   /// Lerps a [FlTitlesData] based on [t] value, check [Tween.lerp].
   static FlTitlesData lerp(FlTitlesData a, FlTitlesData b, double t) {
@@ -216,6 +218,7 @@ class FlTitlesData with EquatableMixin {
       leftTitles: SideTitles.lerp(a.leftTitles, b.leftTitles, t),
       rightTitles: SideTitles.lerp(a.rightTitles, b.rightTitles, t),
       bottomTitles: SideTitles.lerp(a.bottomTitles, b.bottomTitles, t),
+      belowBottomTitles: SideTitles.lerp(a.belowBottomTitles, b.belowBottomTitles, t),
       topTitles: SideTitles.lerp(a.topTitles, b.topTitles, t),
     );
   }
@@ -228,6 +231,7 @@ class FlTitlesData with EquatableMixin {
         topTitles,
         rightTitles,
         bottomTitles,
+        belowBottomTitles,
       ];
 }
 
