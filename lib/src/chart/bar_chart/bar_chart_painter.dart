@@ -421,7 +421,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
             textScaleFactor: textScale);
         tp2.layout();
         final double x2 = groupBarPos.groupX;
-        final double y2 = drawSize.height + getTopOffsetDrawSize() + bottomTitles.margin;
+        final double y2 = drawSize.height + getTopOffsetDrawSize() + bottomTitles.margin + 20;
 
         // x2 -= tp2.width / 2;
         // canvas.save();
