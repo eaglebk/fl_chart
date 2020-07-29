@@ -283,7 +283,7 @@ class SideTitles with EquatableMixin {
     CheckToShowTitle checkToShowTitle,
   })  : showTitles = showTitles ?? false,
         getTitles = getTitles ?? defaultGetTitle,
-        reservedSize = reservedSize ?? 22,
+        reservedSize = reservedSize ?? 40,
         textStyle = textStyle ??
             const TextStyle(
               color: Colors.black,
