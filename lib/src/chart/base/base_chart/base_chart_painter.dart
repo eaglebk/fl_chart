@@ -83,7 +83,7 @@ abstract class BaseChartPainter<D extends BaseChartData> extends CustomPainter {
 
   /// Extra space needed to show horizontal contents around the chart,
   /// like: left, right padding, left, right titles, and so on,
-  double getExtraNeededHorizontalSpace() => 0;
+  double getExtraNeededHorizontalSpace() => 20;
 
   /// Extra space needed to show vertical contents around the chart,
   /// like: top, bottom padding, top, bottom titles, and so on,

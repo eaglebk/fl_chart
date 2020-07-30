@@ -266,7 +266,11 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
 
               _barPaint.color = stackItem.color;
               canvas.save();
-              canvas.clipRect(Rect.fromLTRB(left, stackToY, right, stackFromY));
+              canvas.clipRRect(RRect.fromLTRBAndCorners(left, stackToY, right, stackFromY,
+                  topLeft: borderRadius.topLeft,
+                  topRight: borderRadius.topRight,
+                  bottomLeft: borderRadius.bottomLeft,
+                  bottomRight: borderRadius.bottomRight));
               canvas.drawRRect(barRRect, _barPaint);
               canvas.restore();
             }

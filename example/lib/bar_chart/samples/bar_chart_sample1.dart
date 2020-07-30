@@ -101,7 +101,8 @@ class BarChartSample1State extends State<BarChartSample1> {
 
   BarChartGroupData makeGroupData(
     int x,
-    double y, {
+    double y,
+    bool isStack, {
     bool isTouched = false,
     Color barColor = Colors.white,
     double width = 22,
@@ -114,8 +115,9 @@ class BarChartSample1State extends State<BarChartSample1> {
           y: isTouched ? y + 1 : y,
           color: isTouched ? Colors.yellow : barColor,
           width: width,
+          rodStackItems: isStack ? getBarChartRodStackItems() : null,
           backDrawRodData: BackgroundBarChartRodData(
-            show: true,
+            show: false,
             y: 20,
             color: barBackgroundColor,
           ),
@@ -125,22 +127,31 @@ class BarChartSample1State extends State<BarChartSample1> {
     );
   }
 
+  List<BarChartRodStackItem> getBarChartRodStackItems() {
+    return [
+      BarChartRodStackItem(0, 11.5, const Color(0xFF767676)),
+      BarChartRodStackItem(0, 8, const Color(0xFF62B587)),
+      BarChartRodStackItem(0, 5, const Color(0xFFF3BB45)),
+      BarChartRodStackItem(0, 1.8, const Color(0xFFEB5E28))
+    ];
+  }
+
   List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 5, isTouched: i == touchedIndex);
+            return makeGroupData(0, 5, false, isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(1, 6.5, false, isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
+            return makeGroupData(2, 5, false, isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+            return makeGroupData(3, 7.5, false, isTouched: i == touchedIndex);
           case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
+            return makeGroupData(4, 9, false, isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+            return makeGroupData(5, 11.5, true, isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(6, 6.5, false, isTouched: i == touchedIndex);
           default:
             return null;
         }
@@ -271,25 +282,25 @@ class BarChartSample1State extends State<BarChartSample1> {
       barGroups: List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, Random().nextInt(15).toDouble() + 6,
+            return makeGroupData(0, Random().nextInt(15).toDouble() + 6, false,
                 barColor: widget.availableColors[Random().nextInt(widget.availableColors.length)]);
           case 1:
-            return makeGroupData(1, Random().nextInt(15).toDouble() + 6,
+            return makeGroupData(1, Random().nextInt(15).toDouble() + 6, false,
                 barColor: widget.availableColors[Random().nextInt(widget.availableColors.length)]);
           case 2:
-            return makeGroupData(2, Random().nextInt(15).toDouble() + 6,
+            return makeGroupData(2, Random().nextInt(15).toDouble() + 6, false,
                 barColor: widget.availableColors[Random().nextInt(widget.availableColors.length)]);
           case 3:
-            return makeGroupData(3, Random().nextInt(15).toDouble() + 6,
+            return makeGroupData(3, Random().nextInt(15).toDouble() + 6, false,
                 barColor: widget.availableColors[Random().nextInt(widget.availableColors.length)]);
           case 4:
-            return makeGroupData(4, Random().nextInt(15).toDouble() + 6,
+            return makeGroupData(4, Random().nextInt(15).toDouble() + 6, false,
                 barColor: widget.availableColors[Random().nextInt(widget.availableColors.length)]);
           case 5:
-            return makeGroupData(5, Random().nextInt(15).toDouble() + 6,
+            return makeGroupData(5, Random().nextInt(15).toDouble() + 6, true,
                 barColor: widget.availableColors[Random().nextInt(widget.availableColors.length)]);
           case 6:
-            return makeGroupData(6, Random().nextInt(15).toDouble() + 6,
+            return makeGroupData(6, Random().nextInt(15).toDouble() + 6, false,
                 barColor: widget.availableColors[Random().nextInt(widget.availableColors.length)]);
           default:
             return null;
