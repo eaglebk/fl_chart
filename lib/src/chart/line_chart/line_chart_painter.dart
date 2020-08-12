@@ -107,6 +107,27 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
       }
 
       _drawTouchedSpotsIndicator(canvas, size, barData);
+
+      for (int i = 0; i < barData.spots.length; i++) {
+        if (!isMinOrMaxValue(barData, barData.spots[i])) {
+          continue;
+        }
+        final LineChartBarData tooltipsOnBar = barData;
+        ShowingTooltipIndicators tooltipSpots = ShowingTooltipIndicators(i, [
+          LineBarSpot(tooltipsOnBar, i, tooltipsOnBar.spots[i]),
+        ]);
+        final List<LineBarSpot> showingBarSpots = tooltipSpots.showingSpots;
+        final List<LineBarSpot> barSpots = List.of(showingBarSpots);
+
+        FlSpot topSpot = barSpots[0];
+        for (LineBarSpot barSpot in barSpots) {
+          if (barSpot.y > topSpot.y) {
+            topSpot = barSpot;
+          }
+        }
+        tooltipSpots = ShowingTooltipIndicators(tooltipSpots.lineIndex, barSpots);
+        _drawTouchTooltip(canvas, size, data.lineTouchData.touchTooltipData, topSpot, tooltipSpots);
+      }
     }
 
     if (data.clipData.any) {
@@ -231,9 +252,9 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
   }
 
   void _drawDots(Canvas canvas, Size viewSize, LineChartBarData barData) {
-    if (!barData.dotData.show || barData.spots == null || barData.spots.isEmpty) {
-      return;
-    }
+    // if (!barData.dotData.show || barData.spots == null || barData.spots.isEmpty) {
+    //   return;
+    // }
     viewSize = getChartUsableDrawSize(viewSize);
 
     final barXDelta = _getBarLineXLength(barData, viewSize);
@@ -244,9 +265,14 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
         final double x = getPixelX(spot.x, viewSize);
         final double y = getPixelY(spot.y, viewSize);
 
-        final double xPercentInLine = ((x - getLeftOffsetDrawSize()) / barXDelta) * 100;
+        // final double xPercentInLine = ((x - getLeftOffsetDrawSize()) / barXDelta) * 100;
 
-        final FlDotPainter drawer = barData.dotData.getDotPainter(spot, xPercentInLine, barData, i);
+        if (!isMinOrMaxValue(barData, spot)) {
+          continue;
+        }
+
+        // final FlDotPainter drawer = barData.dotData.getDotPainter(spot, xPercentInLine, barData, i);
+        final FlDotPainter drawer = FlDotCirclePainter(color: Colors.red);
 
         drawer.draw(canvas, spot, Offset(x, y));
       }
@@ -304,8 +330,8 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
       _touchLinePaint.color = indicatorData.indicatorBelowLine.color;
       _touchLinePaint.strokeWidth = indicatorData.indicatorBelowLine.strokeWidth;
 
-      canvas.drawDashedLine(
-          bottom, lineEnd, _touchLinePaint, indicatorData.indicatorBelowLine.dashArray);
+      // canvas.drawDashedLine(
+      //     bottom, lineEnd, _touchLinePaint, indicatorData.indicatorBelowLine.dashArray);
 
       /// Draw the indicator dot
       if (showingDots) {

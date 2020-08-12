@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:fl_chart/src/chart/base/axis_chart/axis_chart_data.dart';
+import 'package:fl_chart/src/chart/line_chart/line_chart_data.dart';
 import 'package:flutter/material.dart';
 
 const double _degrees2Radians = math.pi / 180.0;
@@ -76,6 +78,16 @@ BorderRadius normalizeBorderRadius(BorderRadius borderRadius, double width) {
     bottomLeft: bottomLeft,
     bottomRight: bottomRight,
   );
+}
+
+bool isMinOrMaxValue(LineChartBarData barData, FlSpot spot) {
+  final double maxWeight = barData.spots.map((entry) => entry.y).reduce(max);
+  final double minWeight = barData.spots.map((entry) => entry.y).reduce(min);
+
+  if (maxWeight == spot.y || minWeight == spot.y) {
+    return true;
+  }
+  return false;
 }
 
 /// Lerps between a [LinearGradient] colors, based on [t]
