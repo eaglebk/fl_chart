@@ -1301,7 +1301,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
     canvas.drawRRect(roundedRect, _bgTouchTooltipPaint);
 
     /// draw the texts one by one in below of each other
-    double topPosSeek = tooltipData.tooltipPadding.top;
+    double topPosSeek = tooltipData.tooltipPadding.top + 10;
     for (TextPainter tp in drawingTextPainters) {
       final drawOffset = Offset(
         rect.center.dx - (tp.width / 2),
