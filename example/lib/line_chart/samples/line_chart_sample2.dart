@@ -77,6 +77,8 @@ class _LineChartSample2State extends State<LineChartSample2> {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
+          typeBottomTitle: TypeBottomTitle.BARS,
+          barsStyle: BarsStyle(bigMarkColor: Colors.blue),
           textStyle:
               const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 16),
           getTitles: (value) {

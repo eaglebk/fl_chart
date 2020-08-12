@@ -250,14 +250,41 @@ bool defaultCheckToShowTitle(
   return value != maxValue;
 }
 
+enum TypeBottomTitle { TEXT, BARS }
+
+class BarsStyle {
+  final double littleMarkLength;
+  final double bigMarkLength;
+  final double littleMarkWidth;
+  final double bigMarkWidth;
+  final Color littleMarkColor;
+  final Color bigMarkColor;
+
+  BarsStyle(
+      {double littleMarkLength,
+      double bigMarkLength,
+      double littleMarkWidth,
+      double bigMarkWidth,
+      Color littleMarkColor,
+      Color bigMarkColor})
+      : littleMarkLength = littleMarkLength ??= 5.0,
+        bigMarkLength = bigMarkLength ??= 10.0,
+        littleMarkWidth = littleMarkWidth ??= 1.0,
+        bigMarkWidth = bigMarkWidth ??= 1.8,
+        littleMarkColor = littleMarkColor ??= Colors.white,
+        bigMarkColor = bigMarkColor ??= Colors.white;
+}
+
 /// Holds data for showing each side titles (a title per each axis value).
 class SideTitles with EquatableMixin {
   final bool showTitles;
   final GetTitleFunction getTitles;
+  final BarsStyle barsStyle;
   final double reservedSize;
   final TextStyle textStyle;
   final double margin;
   final double interval;
+  final TypeBottomTitle typeBottomTitle;
   final double rotateAngle;
   final CheckToShowTitle checkToShowTitle;
 
@@ -278,7 +305,9 @@ class SideTitles with EquatableMixin {
   /// you can change rotation of drawing titles using [rotateAngle].
   SideTitles({
     bool showTitles,
+    TypeBottomTitle typeBottomTitle,
     GetTitleFunction getTitles,
+    BarsStyle barsStyle,
     double reservedSize,
     TextStyle textStyle,
     double margin,
@@ -288,11 +317,13 @@ class SideTitles with EquatableMixin {
   })  : showTitles = showTitles ?? false,
         getTitles = getTitles ?? defaultGetTitle,
         reservedSize = reservedSize ?? 40,
+        typeBottomTitle = typeBottomTitle ??= TypeBottomTitle.BARS,
         textStyle = textStyle ??
             const TextStyle(
               color: Colors.black,
               fontSize: 11,
             ),
+        barsStyle = barsStyle ??= BarsStyle(),
         margin = margin ?? 6,
         interval = interval,
         rotateAngle = rotateAngle ?? 0.0,
@@ -310,6 +341,7 @@ class SideTitles with EquatableMixin {
       reservedSize: lerpDouble(a.reservedSize, b.reservedSize, t),
       textStyle: TextStyle.lerp(a.textStyle, b.textStyle, t),
       margin: lerpDouble(a.margin, b.margin, t),
+      barsStyle: b.barsStyle,
       interval: lerpDouble(a.interval, b.interval, t),
       rotateAngle: lerpDouble(a.rotateAngle, b.rotateAngle, t),
       checkToShowTitle: b.checkToShowTitle,
@@ -323,7 +355,9 @@ class SideTitles with EquatableMixin {
         getTitles,
         reservedSize,
         textStyle,
+        barsStyle,
         margin,
+        typeBottomTitle,
         interval,
         rotateAngle,
         checkToShowTitle,

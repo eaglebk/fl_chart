@@ -31,13 +31,13 @@ class LineChartPage extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 28,
-              right: 28,
-            ),
-            child: LineChartSample1(),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(
+          //     left: 28,
+          //     right: 28,
+          //   ),
+          //   child: LineChartSample1(),
+          // ),
           const SizedBox(
             height: 22,
           ),

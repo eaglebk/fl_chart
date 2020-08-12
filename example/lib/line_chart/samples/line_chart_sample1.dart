@@ -108,7 +108,9 @@ class LineChartSample1State extends State<LineChartSample1> {
       titlesData: FlTitlesData(
         bottomTitles: SideTitles(
           showTitles: true,
+          typeBottomTitle: TypeBottomTitle.TEXT,
           reservedSize: 22,
+          barsStyle: BarsStyle(),
           textStyle: const TextStyle(
             color: Color(0xff72719b),
             fontWeight: FontWeight.bold,

@@ -936,35 +936,83 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
         bottomTitles.interval ?? getEfficientInterval(viewSize.width, data.horizontalDiff);
     if (bottomTitles.showTitles) {
       double horizontalSeek = data.minX;
-      while (horizontalSeek <= data.maxX) {
-        if (bottomTitles.checkToShowTitle(
-            data.minX, data.maxX, bottomTitles, bottomInterval, horizontalSeek)) {
-          double x = getPixelX(horizontalSeek, viewSize);
-          double y = viewSize.height + getTopOffsetDrawSize();
-          final String text = bottomTitles.getTitles(horizontalSeek);
-          final TextSpan span = TextSpan(style: bottomTitles.textStyle, text: text);
-          final TextPainter tp = TextPainter(
-              text: span,
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.ltr,
-              textScaleFactor: textScale);
-          tp.layout();
+      if (bottomTitles.typeBottomTitle == TypeBottomTitle.BARS) {
+        final BarsStyle barsStyle = bottomTitles.barsStyle;
+        final step = viewSize.width / 7;
+        final gapBetweenBigBar = step / 4;
+        final viewWidth = getPixelX(horizontalSeek, viewSize) + viewSize.width;
+        print(viewSize);
 
-          x -= tp.width / 2;
-          y += bottomTitles.margin;
-          canvas.save();
-          canvas.translate(x + tp.width / 2, y + tp.height / 2);
-          canvas.rotate(radians(bottomTitles.rotateAngle));
-          canvas.translate(-(x + tp.width / 2), -(y + tp.height / 2));
-          x += translateRotatedPosition(tp.width, bottomTitles.rotateAngle);
-          tp.paint(canvas, Offset(x, y));
-          canvas.restore();
+        final littleMarkLength = barsStyle.littleMarkLength;
+        final bigMarkLength = barsStyle.bigMarkLength;
+
+        final littleMarkWidth = barsStyle.littleMarkWidth;
+        final bigMarkWidth = barsStyle.bigMarkWidth;
+
+        final Color littleMarkColor = barsStyle.littleMarkColor;
+        final Color bigMarkColor = barsStyle.bigMarkColor;
+
+        final paint = Paint();
+
+        for (double i = getPixelX(horizontalSeek, viewSize); i <= viewWidth + 1; i += step) {
+          final double y = viewSize.height + getTopOffsetDrawSize() + 5;
+
+          paint.strokeWidth = bigMarkWidth;
+          paint.color = bigMarkColor;
+
+          final double y1 = y + bigMarkLength / 2;
+          final double y2 = y + bigMarkLength + bigMarkLength / 2;
+
+          print('x is $i; y is $y');
+
+          canvas.drawLine(Offset(i, y1), Offset(i, y2), paint);
         }
+        var s = 0;
+        for (double i = getPixelX(horizontalSeek, viewSize); i < viewWidth; i += gapBetweenBigBar) {
+          final double y = viewSize.height + getTopOffsetDrawSize() + 5;
 
-        if (data.maxX - horizontalSeek < bottomInterval && data.maxX != horizontalSeek) {
-          horizontalSeek = data.maxX;
-        } else {
-          horizontalSeek += bottomInterval;
+          paint.strokeWidth = littleMarkWidth;
+          paint.color = littleMarkColor;
+
+          final double y1 = y + (littleMarkLength + (littleMarkLength / 2));
+          final double y2 = y + (2.5 * littleMarkLength);
+
+          if (s % 4 != 0) {
+            canvas.drawLine(Offset(i, y1), Offset(i, y2), paint);
+          }
+          s++;
+        }
+      } else {
+        while (horizontalSeek <= data.maxX) {
+          if (bottomTitles.checkToShowTitle(
+              data.minX, data.maxX, bottomTitles, bottomInterval, horizontalSeek)) {
+            double x = getPixelX(horizontalSeek, viewSize);
+            double y = viewSize.height + getTopOffsetDrawSize();
+            final String text = bottomTitles.getTitles(horizontalSeek);
+            final TextSpan span = TextSpan(style: bottomTitles.textStyle, text: text);
+            final TextPainter tp = TextPainter(
+                text: span,
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.ltr,
+                textScaleFactor: textScale);
+            tp.layout();
+
+            x -= tp.width / 2;
+            y += bottomTitles.margin;
+            canvas.save();
+            canvas.translate(x + tp.width / 2, y + tp.height / 2);
+            canvas.rotate(radians(bottomTitles.rotateAngle));
+            canvas.translate(-(x + tp.width / 2), -(y + tp.height / 2));
+            x += translateRotatedPosition(tp.width, bottomTitles.rotateAngle);
+            tp.paint(canvas, Offset(x, y));
+            canvas.restore();
+          }
+
+          if (data.maxX - horizontalSeek < bottomInterval && data.maxX != horizontalSeek) {
+            horizontalSeek = data.maxX;
+          } else {
+            horizontalSeek += bottomInterval;
+          }
         }
       }
     }
