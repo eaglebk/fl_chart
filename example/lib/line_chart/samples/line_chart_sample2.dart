@@ -127,7 +127,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
           spots: [
             FlSpot(0, 3),
             FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
+            FlSpot(4.9, 5.331321321321321),
             FlSpot(6.8, 3.1),
             FlSpot(8, 4),
             FlSpot(9.5, 3),

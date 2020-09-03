@@ -162,9 +162,6 @@ class _LineChartSample8State extends State<LineChartSample8> {
             );
           }).toList();
         },
-        touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: Colors.blueAccent,
-        ),
       ),
       borderData:
           FlBorderData(show: true, border: Border.all(color: const Color(0xffecf1fe), width: 1)),
@@ -180,7 +177,6 @@ class _LineChartSample8State extends State<LineChartSample8> {
             FlSpot(4.9, 5),
             FlSpot(6.8, 5),
             FlSpot(7.5, 4),
-            FlSpot(null, null),
             FlSpot(7.5, 2),
             FlSpot(8, 1),
             FlSpot(10, 2),

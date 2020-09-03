@@ -967,7 +967,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
         final step = viewSize.width / 7;
         final gapBetweenBigBar = step / 4;
         final viewWidth = getPixelX(horizontalSeek, viewSize) + viewSize.width;
-        print(viewSize);
+        print('[FlChart] $viewSize');
 
         final littleMarkLength = barsStyle.littleMarkLength;
         final bigMarkLength = barsStyle.bigMarkLength;
@@ -989,7 +989,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
           final double y1 = y + bigMarkLength / 2;
           final double y2 = y + bigMarkLength + bigMarkLength / 2;
 
-          print('x is $i; y is $y');
+          // print('x is $i; y is $y');
 
           canvas.drawLine(Offset(i, y1), Offset(i, y2), paint);
         }
@@ -1202,7 +1202,8 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
         continue;
       }
 
-      final TextSpan span = TextSpan(style: tooltipItem.textStyle, text: tooltipItem.text);
+      final TextSpan span = TextSpan(
+          style: tooltipItem.textStyle, text: num.parse(tooltipItem.text).toStringAsFixed(1));
       final TextPainter tp = TextPainter(
           text: span,
           textAlign: TextAlign.center,
@@ -1240,15 +1241,13 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
       getPixelY(showOnSpot.y, chartUsableSize),
     );
 
-    final double tooltipWidth = biggerWidth + tooltipData.tooltipPadding.horizontal;
-    final double tooltipHeight = sumTextsHeight + tooltipData.tooltipPadding.vertical;
+    final double tooltipWidth = biggerWidth + 2;
+    // final double tooltipHeight = sumTextsHeight + tooltipData.tooltipPadding.vertical;
+    final double tooltipHeight = sumTextsHeight + 2;
 
     /// draw the background rect with rounded radius
-    Rect rect = Rect.fromLTWH(
-        mostTopOffset.dx - (tooltipWidth / 2),
-        mostTopOffset.dy - tooltipHeight - tooltipData.tooltipBottomMargin,
-        tooltipWidth,
-        tooltipHeight);
+    Rect rect = Rect.fromLTWH(mostTopOffset.dx - (tooltipWidth / 2),
+        mostTopOffset.dy - tooltipHeight - 5, tooltipWidth, tooltipHeight);
 
     if (tooltipData.fitInsideHorizontally) {
       if (rect.left < 0) {
@@ -1301,11 +1300,11 @@ class LineChartPainter extends AxisChartPainter<LineChartData>
     canvas.drawRRect(roundedRect, _bgTouchTooltipPaint);
 
     /// draw the texts one by one in below of each other
-    double topPosSeek = tooltipData.tooltipPadding.top + 10;
+    double topPosSeek = tooltipData.tooltipPadding.top;
     for (TextPainter tp in drawingTextPainters) {
       final drawOffset = Offset(
         rect.center.dx - (tp.width / 2),
-        rect.topCenter.dy + topPosSeek,
+        rect.topCenter.dy + topPosSeek / 2,
       );
       tp.paint(canvas, drawOffset);
       topPosSeek += tp.height;
