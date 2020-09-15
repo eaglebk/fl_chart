@@ -123,6 +123,42 @@ class _BarChartState extends AnimatedWidgetBaseState<BarChart> {
           touchData.touchCallback(response);
         }
       },
+      onVerticalDragStart: (d) {
+        final Size chartSize = _getChartSize();
+        if (chartSize == null) {
+          return;
+        }
+
+        final BarTouchResponse response =
+            _touchHandler?.handleTouch(FlVerticalDragStart(d.localPosition), chartSize);
+        if (_canHandleTouch(response, touchData)) {
+          touchData.touchCallback(response);
+        }
+      },
+      onVerticalDragUpdate: (d) {
+        final Size chartSize = _getChartSize();
+        if (chartSize == null) {
+          return;
+        }
+
+        final BarTouchResponse response =
+            _touchHandler?.handleTouch(FlVerticalDragUpdate(d.localPosition), chartSize);
+        if (_canHandleTouch(response, touchData)) {
+          touchData.touchCallback(response);
+        }
+      },
+      onVerticalDragEnd: (d) {
+        final Size chartSize = _getChartSize();
+        if (chartSize == null) {
+          return;
+        }
+
+        final BarTouchResponse response =
+            _touchHandler?.handleTouch(FlVerticalDragEnd(Offset.zero, d.velocity), chartSize);
+        if (_canHandleTouch(response, touchData)) {
+          touchData.touchCallback(response);
+        }
+      },
       child: CustomPaint(
         key: _chartKey,
         size: getDefaultSize(MediaQuery.of(context).size),

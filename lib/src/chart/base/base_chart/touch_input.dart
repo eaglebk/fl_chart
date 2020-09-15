@@ -85,6 +85,80 @@ class FlLongPressEnd extends FlTouchLongInput with EquatableMixin {
 /// Abstract class for normal touches input
 abstract class FlTouchNormalInput extends FlTouchInput {}
 
+/// Represents a [GestureDetector.onVerticalDragStart] event.
+class FlVerticalDragStart extends FlTouchNormalInput with EquatableMixin {
+  /// It is a localized touch position inside our widget,
+  /// it represents [DragDownDetails.localPosition].
+  final Offset localPosition;
+
+  /// [localPosition] is a localized position inside our widget,
+  /// it represents [DragDownDetails.localPosition].
+  FlVerticalDragStart(this.localPosition);
+
+  /// Returns local offset of the touch in the screen,
+  /// it represents [DragDownDetails.localPosition].
+  @override
+  Offset getOffset() {
+    return localPosition;
+  }
+
+  @override
+  List<Object> get props => [
+        localPosition,
+      ];
+}
+
+/// Represents a [GestureDetector.onVerticalDragUpdate] event.
+class FlVerticalDragUpdate extends FlTouchNormalInput with EquatableMixin {
+  /// It is a localized touch position inside our widget,
+  /// it represents [DragDownDetails.localPosition].
+  final Offset localPosition;
+
+  /// [localPosition] is a localized position inside our widget,
+  /// it represents [DragDownDetails.localPosition].
+  FlVerticalDragUpdate(this.localPosition);
+
+  /// Returns local offset of the touch in the screen,
+  /// it represents [DragDownDetails.localPosition].
+  @override
+  Offset getOffset() {
+    return localPosition;
+  }
+
+  @override
+  List<Object> get props => [
+        localPosition,
+      ];
+}
+
+/// Represents a [GestureDetector.onVerticalDragEnd] event.
+class FlVerticalDragEnd extends FlTouchNormalInput with EquatableMixin {
+  /// It is a localized touch position inside our widget.
+  final Offset localPosition;
+
+  /// Represents [DragEndDetails.velocity].
+  final Velocity velocity;
+
+  /// [localPosition] is a localized touch position inside our widget,
+  /// [velocity] represents [DragEndDetails.velocity].
+  FlVerticalDragEnd(
+    this.localPosition,
+    this.velocity,
+  );
+
+  /// Returns local offset of the touch in the screen.
+  @override
+  Offset getOffset() {
+    return localPosition;
+  }
+
+  @override
+  List<Object> get props => [
+        localPosition,
+        velocity,
+      ];
+}
+
 /// Represents a [GestureDetector.onPanDown] event.
 class FlPanStart extends FlTouchNormalInput with EquatableMixin {
   /// It is a localized touch position inside our widget,
