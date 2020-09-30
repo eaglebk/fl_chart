@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:fl_chart/src/chart/bar_chart/bar_chart.dart';
+import 'package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart';
 import 'package:fl_chart/src/chart/base/axis_chart/axis_chart_data.dart';
 import 'package:fl_chart/src/chart/base/base_chart/base_chart_data.dart';
 import 'package:fl_chart/src/chart/base/base_chart/touch_input.dart';
@@ -726,14 +727,13 @@ class BarTooltipItem with EquatableMixin {
 class BarTouchResponse extends BaseTouchResponse with EquatableMixin {
   /// Gives information about the touched spot
   final BarTouchedSpot spot;
+  final List<GroupBarsPosition> groupBarsPosition;
 
   /// If touch happens, [BarChart] processes it internally and passes out a BarTouchedSpot
   /// that contains a [spot], it gives you information about the touched spot.
   /// [touchInput] is the type of happened touch.
-  BarTouchResponse(
-    BarTouchedSpot spot,
-    FlTouchInput touchInput,
-  )   : spot = spot,
+  BarTouchResponse(BarTouchedSpot spot, FlTouchInput touchInput, {this.groupBarsPosition})
+      : spot = spot,
         super(touchInput);
 
   /// Used for equality check, see [EquatableMixin].

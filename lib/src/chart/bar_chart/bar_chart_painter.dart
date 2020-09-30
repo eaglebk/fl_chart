@@ -13,7 +13,7 @@ import '../../utils/utils.dart';
 class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<BarTouchResponse> {
   Paint _barPaint, _bgTouchTooltipPaint;
 
-  List<_GroupBarsPosition> _groupBarsPosition;
+  List<GroupBarsPosition> _groupBarsPosition;
 
   /// Paints [data] into canvas, it is the animating [BarChartData],
   /// [targetData] is the animation's target and remains the same
@@ -159,13 +159,13 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
   }
 
   /// Calculates bars position alongside group positions.
-  List<_GroupBarsPosition> _calculateGroupAndBarsPosition(
+  List<GroupBarsPosition> _calculateGroupAndBarsPosition(
       Size viewSize, List<double> groupsX, List<BarChartGroupData> barGroups) {
     if (groupsX.length != barGroups.length) {
       throw Exception('inconsistent state groupsX.length != barGroups.length');
     }
 
-    final List<_GroupBarsPosition> groupBarsPosition = [];
+    final List<GroupBarsPosition> groupBarsPosition = [];
     for (int i = 0; i < barGroups.length; i++) {
       final BarChartGroupData barGroup = barGroups[i];
       final double groupX = groupsX[i];
@@ -177,12 +177,12 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
         barsX.add(groupX - (barGroup.width / 2) + tempX + widthHalf);
         tempX += barRod.width + barGroup.barsSpace;
       });
-      groupBarsPosition.add(_GroupBarsPosition(groupX, barsX));
+      groupBarsPosition.add(GroupBarsPosition(groupX, barsX));
     }
     return groupBarsPosition;
   }
 
-  void _drawBars(Canvas canvas, Size viewSize, List<_GroupBarsPosition> groupBarsPosition) {
+  void _drawBars(Canvas canvas, Size viewSize, List<GroupBarsPosition> groupBarsPosition) {
     final Size drawSize = getChartUsableDrawSize(viewSize);
 
     for (int i = 0; i < data.barGroups.length; i++) {
@@ -280,7 +280,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
     }
   }
 
-  void _drawTitles(Canvas canvas, Size viewSize, List<_GroupBarsPosition> groupBarsPosition) {
+  void _drawTitles(Canvas canvas, Size viewSize, List<GroupBarsPosition> groupBarsPosition) {
     if (!targetData.titlesData.show) {
       return;
     }
@@ -329,7 +329,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
     final topTitles = targetData.titlesData.topTitles;
     if (topTitles.showTitles) {
       for (int index = 0; index < groupBarsPosition.length; index++) {
-        final _GroupBarsPosition groupBarPos = groupBarsPosition[index];
+        final GroupBarsPosition groupBarPos = groupBarsPosition[index];
 
         final String text = topTitles.getTitles(data.barGroups[index].x.toDouble());
         final TextSpan span = TextSpan(style: topTitles.textStyle, text: text);
@@ -396,7 +396,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
     final bottomTitles = targetData.titlesData.bottomTitles;
     if (bottomTitles.showTitles) {
       for (int index = 0; index < groupBarsPosition.length; index++) {
-        final _GroupBarsPosition groupBarPos = groupBarsPosition[index];
+        final GroupBarsPosition groupBarPos = groupBarsPosition[index];
 
         final String text = bottomTitles.getTitles(data.barGroups[index].x.toDouble());
         final TextSpan span = TextSpan(style: bottomTitles.textStyle, text: text);
@@ -424,7 +424,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
     final belowBottomTitles = targetData.titlesData.belowBottomTitles;
     if (belowBottomTitles.showTitles) {
       for (int index = 0; index < groupBarsPosition.length; index++) {
-        final _GroupBarsPosition groupBarPos = groupBarsPosition[index];
+        final GroupBarsPosition groupBarPos = groupBarsPosition[index];
 
         final String text = belowBottomTitles.getTitles(data.barGroups[index].x.toDouble());
         final TextSpan span = TextSpan(style: belowBottomTitles.textStyle, text: text);
@@ -446,7 +446,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
   void _drawTouchTooltip(
     Canvas canvas,
     Size viewSize,
-    List<_GroupBarsPosition> groupPositions,
+    List<GroupBarsPosition> groupPositions,
     BarTouchTooltipData tooltipData,
     BarChartGroupData showOnBarGroup,
     int barGroupIndex,
@@ -650,14 +650,18 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
   /// then makes a [BarTouchResponse] from the elements that has been touched.
   @override
   BarTouchResponse handleTouch(FlTouchInput touchInput, Size size) {
+    if (_groupBarsPosition == null) {
+      final List<double> groupsX = _calculateGroupsX(size, data.barGroups, data.alignment);
+      _groupBarsPosition = _calculateGroupAndBarsPosition(size, groupsX, data.barGroups);
+    }
     final BarTouchedSpot touchedSpot =
         _getNearestTouchedSpot(size, touchInput.getOffset(), _groupBarsPosition);
-    return BarTouchResponse(touchedSpot, touchInput);
+    return BarTouchResponse(touchedSpot, touchInput, groupBarsPosition: _groupBarsPosition);
   }
 
   /// find the nearest spot base on the touched offset
   BarTouchedSpot _getNearestTouchedSpot(
-      Size viewSize, Offset touchedPoint, List<_GroupBarsPosition> groupBarsPosition) {
+      Size viewSize, Offset touchedPoint, List<GroupBarsPosition> groupBarsPosition) {
     if (groupBarsPosition == null) {
       final List<double> groupsX = _calculateGroupsX(viewSize, data.barGroups, data.alignment);
       groupBarsPosition = _calculateGroupAndBarsPosition(viewSize, groupsX, data.barGroups);
@@ -667,7 +671,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
 
     /// Find the nearest barRod
     for (int i = 0; i < groupBarsPosition.length; i++) {
-      final _GroupBarsPosition groupBarPos = groupBarsPosition[i];
+      final GroupBarsPosition groupBarPos = groupBarsPosition[i];
       for (int j = 0; j < groupBarPos.barsX.length; j++) {
         final double barX = groupBarPos.barsX[j];
         final double barWidth = targetData.barGroups[i].barRods[j].width;
@@ -745,9 +749,9 @@ class BarChartPainter extends AxisChartPainter<BarChartData> with TouchHandler<B
   bool shouldRepaint(BarChartPainter oldDelegate) => oldDelegate.data != data;
 }
 
-class _GroupBarsPosition {
+class GroupBarsPosition {
   final double groupX;
   final List<double> barsX;
 
-  _GroupBarsPosition(this.groupX, this.barsX);
+  GroupBarsPosition(this.groupX, this.barsX);
 }

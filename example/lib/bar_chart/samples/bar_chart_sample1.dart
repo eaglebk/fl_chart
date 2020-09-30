@@ -112,10 +112,10 @@ class BarChartSample1State extends State<BarChartSample1> {
       x: x,
       barRods: [
         BarChartRodData(
-          y: isTouched ? y + 1 : y,
+          y: isTouched ? y + 10 : y,
           color: isTouched ? Colors.yellow : barColor,
           width: width,
-          rodStackItems: isStack ? getBarChartRodStackItems() : null,
+          rodStackItems: isTouched ? getBarChartRodStackItems() : null,
           backDrawRodData: BackgroundBarChartRodData(
             show: false,
             y: 20,
@@ -191,15 +191,33 @@ class BarChartSample1State extends State<BarChartSample1> {
                   weekDay + '\n' + (rod.y - 1).toString(), TextStyle(color: Colors.yellow));
             }),
         touchCallback: (barTouchResponse) {
-          setState(() {
-            if (barTouchResponse.spot != null &&
-                barTouchResponse.touchInput is! FlPanEnd &&
-                barTouchResponse.touchInput is! FlLongPressEnd) {
-              touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
-            } else {
-              touchedIndex = -1;
-            }
-          });
+          if (barTouchResponse.touchInput is FlPanStart) {
+            barTouchResponse.groupBarsPosition.forEach((element) {
+              final groupIndex = barTouchResponse.groupBarsPosition.indexOf(element);
+
+              if (element.groupX > barTouchResponse.touchInput.getOffset().dx - 20 &&
+                  element.groupX < barTouchResponse.touchInput.getOffset().dx + 20) {
+                print("Group is ${groupIndex + 1}");
+                setState(() {
+                  if (touchedIndex == groupIndex) {
+                    touchedIndex = -1;
+                  } else {
+                    touchedIndex = groupIndex;
+                  }
+                });
+              }
+            });
+          }
+
+          // setState(() {
+          //   if (barTouchResponse.spot != null && barTouchResponse.touchInput is FlPanEnd ||
+          //       barTouchResponse.touchInput is FlTouchInput ||
+          //       barTouchResponse.touchInput is FlLongPressEnd) {
+          //     touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
+          //   } else {
+          //     touchedIndex = -1;
+          //   }
+          // });
         },
       ),
       titlesData: FlTitlesData(
